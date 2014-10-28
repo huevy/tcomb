@@ -181,6 +181,38 @@ describe('defaultUpdate', function () {
         });
     });
 
+    describe('defaultUpdate and struct prototypes', function () {
+        it('should leave prototype members', function () {
+            var Struct = struct({
+                a: Num,
+                b: Str
+            });
+            Struct.prototype.serialize = function () {
+                return this.a + ' : ' + this.b;
+            };
+
+            //--------------------------------------------
+
+            var instance = new Struct({
+                a: 200,
+                b: 'OK'
+            });
+
+            eq(instance.serialize(), '200 : OK');
+
+            var updated = defaultUpdate(instance, {
+                a: { $set: 5 }
+            });
+
+            // // But the explicit type cast would pass the test:
+            // var updated = Struct(defaultUpdate(instance, {
+            //     a: { $set: 5 }
+            // }));
+
+            eq(updated.serialize(), '5 : OK');
+        });
+    });
+
     describe('all together now', function () { 
 
         it('should handle mixed commands', function () {
