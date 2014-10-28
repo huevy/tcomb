@@ -212,6 +212,32 @@ describe('defaultUpdate', function () {
             eq(updated.serialize(), '5 : OK');
         });
     });
+    describe('defaultUpdate and type safety', function () {
+        it('should check for member types', function () {
+            var Struct = struct({
+                a: Num,
+                b: Str
+            });
+
+            //--------------------------------------------
+
+            var instance = new Struct({
+                a: 200,
+                b: 'OK'
+            });
+
+            eq(instance, {
+                a: 200,
+                b: 'OK'
+            });
+
+            assert.throws(function () {
+                var updated = defaultUpdate(instance, {
+                    a: { $set: 'asd' }
+                });
+            });
+        });
+    });
 
     describe('all together now', function () { 
 
