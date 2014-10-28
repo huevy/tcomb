@@ -200,14 +200,9 @@ describe('defaultUpdate', function () {
 
             eq(instance.serialize(), '200 : OK');
 
-            var updated = defaultUpdate(instance, {
+            var updated = Struct.update(instance, {
                 a: { $set: 5 }
             });
-
-            // // But the explicit type cast would pass the test:
-            // var updated = Struct(defaultUpdate(instance, {
-            //     a: { $set: 5 }
-            // }));
 
             eq(updated.serialize(), '5 : OK');
         });
@@ -232,7 +227,7 @@ describe('defaultUpdate', function () {
             });
 
             assert.throws(function () {
-                var updated = defaultUpdate(instance, {
+                var updated = Struct.update(instance, {
                     a: { $set: 'asd' }
                 });
             });
