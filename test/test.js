@@ -134,6 +134,22 @@ describe('update', function () {
         });
     });
 
+    describe('structs with nullable field', function () {
+
+        var PointN = struct({
+            x: Num,
+            y: Num,
+            z: maybe(Num)
+        }, 'PointN');
+
+        var instance = new PointN({x: 0, y: 1, z: null});
+        it('should handle $set command', function () {
+            var updated = update(instance, {z: {$set: 1}});
+            eq(instance, {x: 0, y: 1, z: null});
+            eq(updated, {x: 0, y: 1, z: 1});
+        });
+    });
+
     describe('tuples', function () { 
 
         var instance = Tuple(['a', 1]);
